@@ -20,7 +20,7 @@ F|-|-|-|-|-|-|f|
 G|-|-|-|-|-|-|-|
 
 Simply put, if a cell is true, there is a connection between the points of the row and column the cell lives in.
-Using this chart, it's relatively easy to find 
+Using this chart, it's relatively easy to find triangles. Simply put, if you have two true pairs on the same row, (a, b) and (a, c) and pair (b, c) is also true, you've found a triple intersection.
 
 
 (If there's anything I missed or if you have any input for the project, don't be afraid to change the text document.)
