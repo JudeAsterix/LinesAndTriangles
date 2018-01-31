@@ -16,6 +16,8 @@ public class Graph
         this.epsilion = 50;
         this.points.add(new DoubleDimension(500, 670));
         this.points.add(new DoubleDimension(530, 600));
+        createLineChart();
+        findIntersections();
     }
     
     public String toString()
@@ -41,15 +43,48 @@ public class Graph
         System.out.println(toString());
     }
     
+    public void reset()
+    {
+        points.clear();
+        lines.clear();
+    }
+    
+    public void addPoint(DoubleDimension d)
+    {
+        points.add(d);
+        lines.clear();
+        createLineChart();
+        findIntersections();
+    }
+    
+    public void createLineChart() 
+    {
+        for(int i = 0; i < points.size(); i++)
+        {
+            lines.add(new ArrayList());
+            for(int j = 0; j < points.size(); j++)
+            {
+                if(j <= i)
+                {
+                    lines.get(i).add(null);
+                }
+                else
+                {
+                    lines.get(i).add(false);   
+                }
+            }
+        }
+    }
+    
     public void findIntersections()
     {
         for(int i = 0; i < points.size(); i++)
         {
             for(int j = i + 1; j < points.size(); j++)
             {
-                if(Math.abs(points.get(i).getX() - points.get(j).getX()) < epsilion && Math.abs(points.get(i).getY() - points.get(j).getY()) < epsilion)
+                if(Math.abs(points.get(i).getX() - points.get(j).getX()) < 2 * epsilion && Math.abs(points.get(i).getY() - points.get(j).getY()) < 2 * epsilion) // |x1 - x2| < 2 * ep && |y1 - y2| < 2 * ep => intersection
                 {
-                    //TODO connect two 
+                    this.lines.get(i).set(j, true);
                 }
             }
         }
@@ -62,6 +97,17 @@ public class Graph
             g.setColor(Color.black);
             g.fillOval(points.get(i).getXRound() - 2, points.get(i).getYRound() - 2, 5, 5);
             g.drawRect(points.get(i).getXRound() - epsilionRound(), points.get(i).getYRound() - epsilionRound(), 2 * epsilionRound(), 2 * epsilionRound());
+        }
+        
+        for(int i = 0; i < points.size(); i++)
+        {
+            for(int j = i + 1; j < points.size(); j++)
+            {
+                if(lines.get(i).get(j))
+                {
+                    g.drawLine(points.get(i).getXRound(), points.get(i).getYRound(), points.get(j).getXRound(), points.get(j).getYRound());
+                }
+            }
         }
     }
 }
