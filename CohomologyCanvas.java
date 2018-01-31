@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cohomology;
 
 import java.awt.Canvas;
@@ -31,11 +26,22 @@ public class CohomologyCanvas extends Canvas implements MouseListener, MouseMoti
         
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g.setColor(Color.BLACK);
+        g.fillRect(this.getWidth() / 2 - 1, this.getHeight() / 2 - 1, 3, 3);
         graph.paint(g);
+    }
+    
+    public void repaint(Graphics g)
+    {
+        paint(g);
     }
 
     @Override
-    public void mouseClicked(MouseEvent me) {}
+    public void mouseClicked(MouseEvent e) 
+    {
+        graph.addPoint(new DoubleDimension(e.getX(), e.getY()));
+        repaint();
+    }
     @Override
     public void mousePressed(MouseEvent me) {}
     @Override
