@@ -1,7 +1,7 @@
-
 package cohomology;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -10,10 +10,13 @@ public class Graph
     double epsilion;
     ArrayList<DoubleDimension> points = new ArrayList<>();
     ArrayList<ArrayList<Boolean>> lines = new ArrayList<>();
+    ArrayList<DoublePolygon> tris = new ArrayList<>();
+    
+    boolean showBounds = false;
     
     public Graph()
     {
-        this.epsilion = 50;
+        this.epsilion = 150;
         this.points.add(new DoubleDimension(500, 670));
         this.points.add(new DoubleDimension(530, 600));
         createLineChart();
@@ -53,6 +56,7 @@ public class Graph
     {
         points.add(d);
         lines.clear();
+        tris.clear();
         createLineChart();
         findIntersections();
     }
@@ -78,6 +82,8 @@ public class Graph
     
     public void findIntersections()
     {
+        long startTime = System.nanoTime();
+        System.out.println("Calculating...");
         for(int i = 0; i < points.size(); i++)
         {
             for(int j = i + 1; j < points.size(); j++)
@@ -88,15 +94,39 @@ public class Graph
                 }
             }
         }
+        
+        for(int l = 0; l < lines.size(); l++)
+        {
+            for(int m = l + 1; m < lines.size(); m++)
+            {
+                if(lines.get(l).get(m))
+                {
+                    for(int n = m + 1; n < lines.size(); n++)
+                    {
+                        if(lines.get(l).get(n) && lines.get(m).get(n))
+                        {
+                            DoubleDimension[] d = {points.get(l), points.get(n), points.get(m)};
+                            tris.add(new DoublePolygon(d));
+                        }
+                    }
+                }
+            }
+        }
+        long endTime = System.nanoTime();
+        System.out.println("Time to calculate: " + ((endTime - startTime) / 1000000));
     }
     
     public void paint(Graphics g)
     {
+        long startTime = System.nanoTime();
         for(int i = 0; i < points.size(); i++)
         {
             g.setColor(Color.black);
             g.fillOval(points.get(i).getXRound() - 2, points.get(i).getYRound() - 2, 5, 5);
-            g.drawRect(points.get(i).getXRound() - epsilionRound(), points.get(i).getYRound() - epsilionRound(), 2 * epsilionRound(), 2 * epsilionRound());
+            if(showBounds)
+            {
+                g.drawRect(points.get(i).getXRound() - epsilionRound(), points.get(i).getYRound() - epsilionRound(), 2 * epsilionRound(), 2 * epsilionRound());
+            }
         }
         
         for(int i = 0; i < points.size(); i++)
@@ -109,5 +139,13 @@ public class Graph
                 }
             }
         }
+        
+        g.setColor(new Color(100, 100, 100, 25));
+        for(int i = 0; i < tris.size(); i++)
+        {
+            g.fillPolygon(tris.get(i).getPolygon());
+        }
+        long endTime = System.nanoTime();
+        System.out.println("Time to paint: " + ((endTime - startTime) / 1000000));
     }
 }
