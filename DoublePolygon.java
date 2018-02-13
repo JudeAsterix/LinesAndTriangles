@@ -90,12 +90,32 @@ public class DoublePolygon
         return ret;
     }
     
+    public int[] getintXWithDrag(int DragX)
+    {
+        int[] ret = new int[sides];
+        for(int i = 0; i < sides; i++)
+        {
+            ret[i] = getIntDim(i).width + DragX;
+        }
+        return ret;
+    }
+    
     public int[] getintY()
     {
         int[] ret = new int[sides];
         for(int i = 0; i < sides; i++)
         {
-            ret[i] = getIntDim(i).height;
+            ret[i] = -(getIntDim(i).height);
+        }
+        return ret;
+    }
+    
+    public int[] getintYWithDrag(int DragY)
+    {
+        int[] ret = new int[sides];
+        for(int i = 0; i < sides; i++)
+        {
+            ret[i] = -(getIntDim(i).height) + DragY;
         }
         return ret;
     }
@@ -103,5 +123,10 @@ public class DoublePolygon
     public Polygon getPolygon()
     {
         return new Polygon(getintX(), getintY(), sides);
+    }
+    
+    public Polygon getPolygonWithDrag(int DragX, int DragY)
+    {
+        return new Polygon(getintXWithDrag(DragX), getintYWithDrag(DragY), sides);
     }
 }
