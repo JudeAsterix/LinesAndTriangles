@@ -4,7 +4,7 @@ import java.awt.Dimension;
 
 public class DoubleDimension 
 {
-    double x, y;
+    private double x, y;
     
     public DoubleDimension()
     {
@@ -76,4 +76,10 @@ public class DoubleDimension
     {
         return (int)(Math.round(y));
     }
+    
+    public boolean hasSameCoords(DoubleDimension d)
+    {
+        return((getX() == d.getX()) && getY() == d.getY());
+    }
 }
+
